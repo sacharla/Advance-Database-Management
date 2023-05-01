@@ -1,0 +1,117 @@
+// Select the database to use.
+use('Hospital');
+
+// Insert a few documents into the sales collection.
+db.Pateint_Nurse_Transaction.insertMany([
+  { '_id': 1, 'Nurse Number': 412, 'Patient_Number': 12, 'Nurse Supervisor': 501, 'Department Number': 601},
+  { '_id': 2, 'Nurse Number': 412, 'Patient Number': 13, 'Nurse Supervisor': 502, 'Department Number': 601},
+]);
+
+// Run a find command to view items.
+db.Pateint_Nurse_Transaction.findOne({'Patient Number': 13});
+
+//Run an update command to update data
+db.Pateint_Nurse_Transaction.updateOne(
+    { '_id' : 2 }, 
+    { $set: {'Nurse Number' : 413, 'Patient Number' : 13 } },
+    { upsert: true }
+  );
+
+//Run a delete command to delete the item.
+db.Pateint_Nurse_Transaction.deleteMany({'_id': 1, 'Nurse Number': 412, 'Patient_Number': 12, 'Nurse Supervisor': 501, 'Department Number': 601});
+
+
+
+use('Hospital');
+db.Patient_Doctor_Transaction.insertMany([
+  { '_id': 3, 'Doctor Number': 132, 'Patient_Number': 12, 'Operation Name': "Cholecystectomy", 'Date': "02nd feb 2021", 'Operating Room': 212, 'Price': "23456"},
+  { '_id': 4, 'Doctor Number': 133, 'Patient_Number': 13, 'Operation Name': "Cholecystectomy", 'Date': "03rd feb 2021", 'Operating Room': 213, 'Price': "23736"},
+]);
+db.Patient_Doctor_Transaction.findOne({'Patient_Number': 13});
+db.Patient_Doctor_Transaction.updateOne(
+    { '_id' : 4 }, 
+    { $set: {'Doctor Number' : 135, 'Patient Number' : 14 } },
+    { upsert: true }
+  );
+db.Patient_Doctor_Transaction.deleteMany({'_id': 3, 'Doctor Number': 132, 'Patient_Number': 12, 'Operation Name': "Cholecystectomy", 'Date': "02nd feb 2021", 'Operating Room': 212, 'Price': "23456"});
+
+
+
+use('Hospital');
+db.Pateint_OperationType_Cost_Transaction.insertMany([
+  { '_id': 5, 'Patient_Number': 12, 'Name': {'first': "Travis", 'last': "Gilbert"}, 'Operation Name': "Cholecystectomy", 'Cost': "23456"},
+  { '_id': 6, 'Patient_Number': 13, 'Name': {'first': "William", 'last': "Howardson"}, 'Operation Name': "Cholecystectomy", 'Cost': "23056"},
+]);
+db.Pateint_OperationType_Cost_Transaction.findOne({'Patient_Number': 13});
+db.Pateint_OperationType_Cost_Transaction.updateOne(
+    { '_id' : 6 }, 
+    { $set: {'Patient Number' : 15} },
+    { upsert: true }
+  );
+db.Pateint_OperationType_Cost_Transaction.deleteMany({'_id': 5, 'Patient_Number': 12, 'Name': {'first': "Travis", 'last': "Gilbert"}, 'Operation Name': "Cholecystectomy", 'Cost': "23456"});
+
+
+use('Hospital');
+db.Patient_Insurance_Claim_Transaction.insertMany([
+  { '_id': 17, 'Claim Number': 812, 'Company Name': "Caresource", 'Patient Number': 19, 'Diagnosis': "Cholecystectomy", 'Amount': 18976},
+  { '_id': 18, 'Claim Number': 813, 'Company Name': "Caresource", 'Patient Number': 20, 'Diagnosis': "Cholecystectomy", 'Amount': 19532},
+]);
+db.Patient_Insurance_Claim_Transaction.findOne({'Patient Number': 12});
+db.Patient_Insurance_Claim_Transaction.updateOne(
+    { '_id' : 8 }, 
+    { $set: {'Patient Number' : 15} },
+    { upsert: true }
+  );
+db.Patient_Insurance_Claim_Transaction.deleteMany({'_id': 17, 'Claim Number': 812, 'Company Name': "Caresource", 'Patient Number': 19, 'Diagnosis': "Cholecystectomy", 'Amount': 18976});
+
+
+
+// Aggregation1
+use('Hospital');
+db.Patient_Insurance_Claim_Transaction.insertMany([
+  { '_id': 7, 'Claim Number': 812, 'Company Name': "Caresource", 'Patient_Number': 12, 'Diagnosis': "Cholecystectomy", 'Amount': 18976},
+  { '_id': 9, 'Claim Number': 815, 'Company Name': "Caresource", 'Patient_Number': 12, 'Diagnosis': "Cholecystectomy", 'Amount': 19000},
+]);
+db.Patient_Insurance_Claim_Transaction.aggregate ( [
+  {
+    $group: { _id : '$Patient_Number', totalcost: { $sum: "$Amount" } }
+  }
+]);
+
+
+//Aggregation2
+use('Hospital');
+db.Patient_Doctor_Transaction.insertMany([
+  { 'Doctor Number': 132, 'Patient_Number': 12, 'Operation Name': "Cholecystectomy", 'Date': "02nd feb 2021", 'Operating Room': 212, 'Price': 23456},
+  { 'Doctor Number': 136, 'Patient_Number': 12, 'Operation Name': "Cholecystectomy", 'Date': "02nd feb 2021", 'Operating Room': 212, 'Price': 23000},
+]);
+db.Patient_Doctor_Transaction.aggregate ( [
+  {
+    $group: { _id : '$Patient_Number', totalcost: { $sum: "$Price" } }
+  }
+]);
+
+//Aggregation3
+use('Hospital');
+db.Pateint_OperationType_Cost_Transaction.insertMany([
+  { 'Patient_Number': 12, 'Name': {'first': "Travis", 'last': "Gilbert"}, 'Operation Name': "Cholecystectomy", 'Cost': 23456},
+  { 'Patient_Number': 12, 'Name': {'first': "Travis", 'last': "Gilbert"}, 'Operation Name': "Cholecystectomy", 'Cost': 60000},
+]);
+db.Pateint_OperationType_Cost_Transaction.aggregate ( [
+  {
+    $group: { _id : '$Patient_Number', totalcost: { $sum: "$Cost" } }
+  }
+]);
+
+//Aggregation4
+use('Hospital');
+db.Pateint_Nurse_Transaction.insertMany([
+  {'Nurse Number': 417, 'Patient_Number': 12, 'Nurse Supervisor': 501, 'Department Number': 601},
+  {'Nurse Number': 418, 'Patient_Number': 12, 'Nurse Supervisor': 501, 'Department Number': 601},
+]);
+  
+db.Pateint_Nurse_Transaction.aggregate([
+  {
+    $project: {supervisor : 501}
+  }
+]).pretty()

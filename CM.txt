@@ -1,0 +1,263 @@
+10.21.6.31
+https://collaborate.avaya.com/aacpa/?participantCode=8482555 
+1-513-228-8888  Pin:8482555
+SSH (admin/admin01) to your US:
+SMGR: admin/Avaya!23
+AVP:root/avaya123
+CM:tech/avaya123
+
+RSE:
+Cory Thorstenson
+
+Linux
+************************************
+changing ownership:#chown user file
+#chmod 777 file
+Copying File:
+#sftp <IP>
+  >>put <sourcefilelocation/filename> <destinationfilelocation>
+scp /tmp/smreport-belabasmmgt1-201911201250.tgz init@10.56.160.62:/tmp
+
+Check ing the ports:
+# netstat -an|grep 162|grep LISTEN
+#sudo lsof -i -P -n | grep LISTEN | grep 162
+netstat -an | grep <port>
+ping -I eth0  <IP address of SIP entity> 
+finding a file:
+find / -name "testAlarm.log"
+find / -type f -size +100M -exec ls -lh {} \; 2> /dev/null | awk '{ print $NF ": " $5 }' | sort -nk 2,2
+du -h --max-depth=1 /var/
+find / -type f -size +100M -exec ls -lh {} \; 2>> /dev/null
+du -sh * | sort -n
+
+
+Generating alarm and traps out of port 
+/opt/spirit/scripts/utils/generateTestAlarm.sh 
+tshark -i eth0 -f "port 162"
+tshark -n host 153.2.40.79
+ tshark -n host 153.2.40.79 -w /tmp/testutility.pcap (can see packet number)
+ tshark -r  /tmp/testutility.pcap
+ tshark -i any host 153.2.40.79
+Usage:
+tshark -ni interface
+It will capture the traffic of the specified interface and print the output to the display
+
+tshark -ni interface -w filename.pcap
+It will capture the traffic of the specified interface and print the output to the specified file
+Usage examples:
+
+tshark -ni B1 -w /archive/pcapfiles/IPCS2/sbctrace.pcap
+It will capture the traffic of the B1 interface and print the output to the specified file.
+
+tshark -ni any -w /archive/pcapfiles/IPCS2/sbctrace.pcap
+It will capture the traffic on every interface and print the output to the specified file.
+
+tshark -ni any -b filesize:40000 -b files:100 -w call.pcap -q & 
+Write 100 40k files out
+
+df -hrt for old files first
+Capturing Wireshark on MG:Capture interface fastethernet 10/3
+
+CM
+****************************************************************************
+ sudo  arping -I eth0 -c1 10.34.89.51
+
+MST
+where gzip
+Compress: gzip -9 file.gz
+Decompress:gunzip file.gz / gzip -d file.gz
+logc -t 20161205:0930-20161205:0933 MST|logmst -c >/tmp/MST.M
+Decode through Toolsa: MTA MST.M >/tmp/MST.m
+Decode through DRCCD: fsmta MST.M
+
+
+DRCCD:
+spbase 21656
+. pjenvir 5.2.1sp18.00
+drccd [10650]-> mo -h
+gives help
+drccd [10651]-> mo -l
+lists all mo
+procerror=7204
+drccd [10651]-> mo 7204
+MTCEVT ERR type=0321 lname=5400
+drccd [10656]-> mo x5400
+pro=7171,err=203,seq=38462,da1=0(0x0),da2=425(0x1a9)]
+drccd [10651]-> perr 7171 38462
+err_proc(E_DATA_ERR, E_PSH323L3TMO+2,
+                                  CALL_ID(), (LOG_DATA)(bchan_uid));
+err=203--->E_DATA_ERR
+seq=38462---->E_PSH323L3TMO+2
+da1=0(0x0)----->CALL_ID()
+da2=425(0x1a9)------>(LOG_DATA)(bchan_uid)
+
+drccd [10651]-> CS
+then,Find this definition: 
+
+SAT commands:
+list ip-interface all---> CLAN, MEDPRO,VAL,ALL
+list  ip-network-region 
+list ips (ipsis)
+list media-g
+list conf all
+get force-take over IPSI
+
+list uniform-dialplan
+display dialplan analysis
+list aar route-chosen
+list ip-media-parameters
+list configuration media-gateway
+list configuration 
+list AAR
+(IP phone commands)
+list registered-ip-stations all 
+list registered-ip-stations gatekeeper (to see which clan station is regostered to )
+list extension-type 
+list user-profiles
+list usage extension 0306
+list media server
+display node-names ip 
+
+display internal-data trk-port T04001 (port from status trunk)
+display internal-data ext-map
+display cabinet
+display errors
+display event
+display ip-interface 
+Enter board location: [cabinet(1-64)];carrier(A-E);slot(slot#) OR
+                      procr['schedule']
+display ipserver-interface	
+Enter port network number between 1-64, ['schedule']
+display media-gateway, media-server
+display ip-network-region
+display failed-ip-network-region
+display node-names ip 
+
+
+status ip-board
+Enter ['v4' or 'v6'] ip board location
+status clan > all,ip,port,usage,
+status media-processor board /all
+status link procr                                               
+Hunt,Skill, Split:
+You have more call distribution options if you activate the Automatic Call Distribution (ACD) or Expert Agent Selection (EAS) setting. These options are available if the ACD and Expert Agent Selection (EAS) fields on the Optional Features screen are enabled.  When you assign ACD to a hunt group, the group is called a split. When you assign EAS to a hunt group, the group is called a skill.
+
+
+TCM:
+
+tcm> uid xxxx
+tcm45> ext 6583
+uid is 00009b34( to check UID)
+to check call legs:
+tcm46> rd :sus but x9b34
+tcm> calls ext <extnumber> ( to see call ids)
+route =CP_SD h0x902 h0x821 l0x<call id of call to be dropped>
+
+Cat cmds:
+#cat /etc/passwd  [To find saved pw for users]
+#cat /etc/if config [To find saved IP Addrs for users]
+#cat /etc/hosts
+
+Station:
+#list station 3000
+#list station 3000 count 10 ( to get first 10 stations)
+
+count number of directories:
+ ls -1 | wc -l
+root >ls -alh
+total 730M
+
+MEDPRO:
+KB01006273
+List IP-interface MedPro.
+Enable session.
+Exit SAT.
+Telnet xxx.xxx.xxx.xxx (IP address of MedPro board goes under xxx.xxx.xxx.xxx).
+
+IPSI:
+ethtool eth0
+ipsisession -p 10.50.102.11
+ssh 10.50.102.11
+root@Hdatccm1> cat /etc/sysconfig/network
+traceroute 172.16.225.172 
+
+Copy from DRCCD to TOOLSA:scp <filename> handle@st3tds04.us1.avaya.com:/home1/handle
+
+Wireshark:
+tshark -i eth0 -a filesize:500 -w /var/home/ftp/pub/stationreg.pcap -q -w 
+ ps -ef | grep tshark
+kill -9 PID
+corruption: George Novakovich  (BP)
+James Einboden (A1)
+
+Debug logs:
+logfilter -s all
+enable:logfilter -l 3 -t 3 all
+disable:logfilter -l 1 -t 3 all
+
+Disable debugging:
+debug_reset
+sd_debugoff true
+
+IP Endpoints:
+46xx file is under:
+[root@njraravautiusa html]# pwd
+/var/www/html
+
+The 46xx file is here:
+
+[root@AVCMHVLUS /]# find -name "46xx*"
+./var/www/html/46xxupgrade.scr.php
+./var/www/html/46xxsettings.txt (see attachment)
+
+And the 96xx upgrade file is here:
+
+/opt/IPPhoneFirmware/96xx-IPT-H323-R3_2_8-091517/96xxupgrade.txt
+
+Filesync Issue:
+cd /etc/opt/defty
+from main:
+filesync -v -q ESSto check certs:/etc/opt/ecs/certs/cm/private
+openssl x509 -in server.pem -text -noout | grep "Not After"
+Check certs on both:
+ls -l /etc/opt/ecs/certs/cm/CA
+
+MG
+**********************************************
+#tshel (exit to exit, ctrl+z may reboot) 
+~rdump(reboot)
+~ldump
+#show faults
+#show events
+#show restart
+#show sync timinsg
+#sh fans
+#sh platform power
+#sh plat fan
+(G450 has seperate fans, G430 has to replace the MG to replace fans hence try reset chasis before replacing fan)
+
+
+CMS
+******************************************************************************************
+uses MIS links
+verrsion:rpm -q cms
+ 
+cat /etc/ecs.conf | grep -i "servertype"
+uname -a
+[root@TPSLCB07pri opt]# dmidecode |grep -i dell
+        String 1: Dell System 
+display communication-interface processor-channelmonitor bcms skill 610  
+display communication-interface processor-channels
+
+
+
+AAMS
+****************************************************************************************
+https://127.0.0.1:8443/emlogin
+
+AES
+****************************************************************************************
+
+status AESvcs cti
+status AESvcs link
+display node-names ip <node name>
